@@ -31,7 +31,8 @@ contract stock is Ownable, ReentrancyGuard, ERC721A {
     mapping (uint256 => string) tokenURIMap;
     mapping (address => Document) documentMap;
     mapping (address => Provider) providerMap;
-    
+    mapping (uint256 => address) ownerShipMap;
+
     constructor(uint256 maxBatchSize_, uint256 collectionSize_) 
         ERC721A("Stock", "Stock", maxBatchSize_, collectionSize_) {
     }
@@ -60,8 +61,14 @@ contract stock is Ownable, ReentrancyGuard, ERC721A {
         return ts;
     }
 
-    function read(uint8 _mintNumber) external payable nonReentrant returns (uint256) {
-         require(_mintNumber);
+    function readDocument(uint8 _mintNumber) external payable nonReentrant returns (Document) {
+         require(ownerShipMap[_mintNumber] ==  msg.sender, "You don't have ownership.");
+         return documentMap[msg.sender];
+    }
+    
+    function readProvider(uint8 _mintNumber) external payable nonReentrant returns (Provider) {
+         require(ownerShipMap[_mintNumber] ==  msg.sender, "You don't have ownership.");
+         return providerMap[msg.sender];
     }
 
     function write(uint8 _mintNumber) public {
