@@ -2132,10 +2132,10 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
     }
     
 
-    mapping (uint256 => string) tokenURIMap;
+    mapping (uint256 => string) public tokenURIMap;
+    mapping (uint256 => uint256) public tokenIdToPrice;
     mapping (address => Document) documentMap;
     mapping (address => Provider) providerMap;
-    mapping (uint256 => address) ownerShipMap;
 
     uint256 public nextTokenId = 0;
     uint256 public platformFee = 0.03;
@@ -2144,12 +2144,8 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
 
     }
     event Mint (address indexed _from, 
-                address platform_owner, 
-                address seller, 
-                address miner,    
-                uint256 amount_to_miner, 
-                uint256 amount_to_platform_owner, 
-                uint256 amount_to_seller
+                uint256 amount,
+                uint256 totalSupply
     );
     event MintByAdmin ( address indexed _from, uint256 tokenId);
 
@@ -2161,52 +2157,61 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
     }
 
 
-    function mint(uint256 amount) public payable {
-        require(msg.value >= (amount * platformFee / 100), 'Value below price');
+    function mint(uint256 _amount, string _tokenURI) public payable {
+        require(msg.value >= (_amount * platformFee / 100), 'Value below price');
         _mint(msg.sender, nextTokenId);
-        approve(owner(), nextTokenId);
+        // approve(owner(), nextTokenId);
+        tokenURIMap[nextTokenId] = _tokenURI;
+        tokenIdToPrice[nextTokenId] = _amount;
 
-        transferToPlatform(amount);
-        transferToOwner(miner, amount_to_miner);
-        transferToSeller(seller,amount_to_seller);
+        transferToPlatform(msg.value);
         nextTokenId++;
         emit Mint(msg.sender, 
-                    platform_owner, 
-                    seller,
-                    miner,  // _mintPrice
-                    amount_to_miner,
-                    amount_to_platform_owner,
-                    amount_to_seller
+                    amount,  //mint price 
+                    totalSupply()  //totalSupply
         );
     }
 
-    function transferToPlatform(uint256 amount) private {
-    (bool success,) = this.owner.call{value : _amount}("");
-    require(success, "Transfer failed.");
+    function transferToPlatform(uint256 _amount) private {
+        (bool success,) = this.call{value : _amount}("");
+        require(success, "Transfer failed.");
     }
 
-    function mintBeta(uint8 _mintCount, bytes32[] memory _proof) external payable nonReentrant returns (uint256) {
-        require(msg.sender != address(0));
-        uint256 numChunks = _mintCount / maxBatchSize;
-        for (uint256 i = 0; i < numChunks; i++) {
-            _safeMint(msg.sender, maxBatchSize);
-        }
-
-        documentMap[msg.sender].invoiceNr = "";
-        providerMap[msg.sender].invoiceNr = "";
-        _safeMint(msg.sender, maxBatchSize);
-        uint256 ts = totalSupply();
-        emit Mint(msg.sender);
-        return ts;
-    }
-
-
-
-    function mintByAdmin () public{
+    function mintByAdmin (string _tokenURI) public{
         _mint(msg.sender, nextTokenId);
+        tokenURIMap[nextTokenId] = _tokenURI;
         nextTokenId++;
         emit MintByAdmin(msg.sender, nextTokenId);
     }
+
+    function purchase(uint256 _amount, uint256 _nftId, string _tokenURI) public payable {
+        uint256 price = tokenIdToPrice[_tokenId];
+        require(price > 0, 'This token is not for sale');
+        require(msg.value >= _amount, 'Value below price');
+        
+        address seller = ownerOf(_nftId);
+        _transfer(seller, msg.sender, _nftId);
+
+        tokenURIMap[_nftId] = _tokenURI;
+
+        transferToBuyer(msg.value);
+        emit Mint(msg.sender, 
+                    amount,  //mint price 
+                    totalSupply()  //totalSupply
+        );
+    }
+
+    function transferToSeller(uint256 _amount) private {
+        (bool success,) = this.call{value : _amount}("");
+        require(success, "Transfer failed.");
+    }
+    
+    function transferToBuyer(uint256 _amount) private {
+        (bool success,) = this.call{value : _amount}("");
+        require(success, "Transfer failed.");
+    }
+
+
 
      /**
      * Override tokenURI
