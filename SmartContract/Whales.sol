@@ -2137,39 +2137,35 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
     mapping (address => Provider) providerMap;
 
     uint256 public nextTokenId = 0;
-    uint256 public platformFee = 0.03;
+    uint256 public platformFee = 3;
 
-    constructor() public ERC721('Whales', 'Stock') {
+    constructor() public ERC721('Whales', 'Wh') {
 
     }
+
     event Mint (address indexed _from, 
                 uint256 amount,
                 uint256 totalSupply
     );
+
     event MintByAdmin ( address indexed _from, uint256 tokenId);
 
-
-    event Mint (address indexed _from, 
-                uint256 amount,
-                uint256 totalSupply
-    );
-
-    emit purchase(address indexed _from,
+    event PurchaseEvent(address indexed _from,
                   address indexed _to, 
-                    amount,  //mint price 
-                    _nftId, 
-                    _tokenURI
+                  uint256  amount,  //mint price 
+                  uint256  _nftId, 
+                  string  _tokenURI
     );
 
     /**
     * Set platform fee
     */
-    function setPlatfromFee(uint256 fee) public onlyOwner {
-        this.platformFee = fee;
+    function setPlatfromFee(uint256 _fee) public onlyOwner {
+        platformFee = _fee;
     }
 
 
-    function mint(uint256 _amount, string _tokenURI) public payable {
+    function mint(uint256 _amount, string memory _tokenURI) public payable {
         require(msg.value >= (_amount * platformFee / 100), 'Value below price');
         _mint(msg.sender, nextTokenId);
         // approve(owner(), nextTokenId);
@@ -2178,21 +2174,21 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
         transferToPlatform(msg.value);
         nextTokenId++;
         emit Mint(msg.sender, 
-                    amount,  //mint price 
+                    _amount,  //mint price 
                     totalSupply()  //totalSupply
         );
     }
 
     
 
-    function mintByAdmin (string _tokenURI) public{
+    function mintByAdmin (string memory _tokenURI) public {
         _mint(msg.sender, nextTokenId);
         tokenURIMap[nextTokenId] = _tokenURI;
         nextTokenId++;
         emit MintByAdmin(msg.sender, nextTokenId);
     }
 
-    function purchase(uint256 _amount, uint256 _nftId, string _tokenURI) public payable {
+    function purchase(uint256 _amount, uint256 _nftId, string memory _tokenURI) public payable {
         require(msg.value >= _amount, 'Value below price');
         
         address seller = ownerOf(_nftId);
@@ -2201,7 +2197,7 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
         tokenURIMap[_nftId] = _tokenURI;
 
         transferToSeller(seller, msg.value);
-        emit purchase(
+        emit PurchaseEvent(
                     seller,
                     msg.sender, 
                     msg.value,
@@ -2211,7 +2207,7 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
     }
 
     function transferToPlatform(uint256 _amount) private {
-        (bool success,) = this.call{value : _amount}("");
+        (bool success,) = address(this).call{value : _amount}("");
         require(success, "Transfer failed.");
     }
 
@@ -2224,10 +2220,10 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
      * Override tokenURI
      * beta
      */
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        require(_exists(tokenId), "Token does not exist");
-        return string(abi.encodePacked(tokenURIMap[tokenId]));
-    }
+    // function tokenURI(uint256 tokenId) public view override returns (string memory) {
+    //     require(_exists(tokenId), "Token does not exist");
+    //     return string(abi.encodePacked(tokenURIMap[tokenId]));
+    // }
 
     function setBaseURI(string memory baseURI) public onlyOwner {
         _setBaseURI(baseURI);
