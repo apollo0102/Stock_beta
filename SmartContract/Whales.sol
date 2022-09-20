@@ -2114,27 +2114,8 @@ contract Ownable is Context {
 pragma solidity =0.6.6;
 
 contract Whales is ERC721Pausable, AccessControl, Ownable {
-    
-
-    //these values will be changed. It's not static values. 
-    struct Document { 
-      string invoiceNr;
-      string buyerName;
-      uint totalAmount;
-      string supplierName;
-      uint dueDate;
-    }
-
-    struct Provider {
-        bool provenance;
-        uint riskScore;
-        uint collateralValue;
-    }
-    
 
     mapping (uint256 => string) public tokenURIMap;
-    mapping (address => Document) documentMap;
-    mapping (address => Provider) providerMap;
 
     uint256 public nextTokenId = 0;
     uint256 public platformFee = 3;
@@ -2215,15 +2196,6 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
         (bool success,) = _seller.call{value : _amount}("");
         require(success, "Transfer failed.");
     }
-
-     /**
-     * Override tokenURI
-     * beta
-     */
-    // function tokenURI(uint256 tokenId) public view override returns (string memory) {
-    //     require(_exists(tokenId), "Token does not exist");
-    //     return string(abi.encodePacked(tokenURIMap[tokenId]));
-    // }
 
     function setBaseURI(string memory baseURI) public onlyOwner {
         _setBaseURI(baseURI);
