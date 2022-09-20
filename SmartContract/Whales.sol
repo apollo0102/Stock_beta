@@ -2185,7 +2185,7 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
     require(success, "Transfer failed.");
     }
 
-    function mint(uint8 _mintCount, bytes32[] memory _proof) external payable nonReentrant returns (uint256) {
+    function mintBeta(uint8 _mintCount, bytes32[] memory _proof) external payable nonReentrant returns (uint256) {
         require(msg.sender != address(0));
         uint256 numChunks = _mintCount / maxBatchSize;
         for (uint256 i = 0; i < numChunks; i++) {
