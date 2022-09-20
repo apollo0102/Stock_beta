@@ -2133,7 +2133,6 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
     
 
     mapping (uint256 => string) public tokenURIMap;
-    mapping (uint256 => uint256) public tokenIdToPrice;
     mapping (address => Document) documentMap;
     mapping (address => Provider) providerMap;
 
@@ -2175,7 +2174,6 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
         _mint(msg.sender, nextTokenId);
         // approve(owner(), nextTokenId);
         tokenURIMap[nextTokenId] = _tokenURI;
-        tokenIdToPrice[nextTokenId] = _amount;
 
         transferToPlatform(msg.value);
         nextTokenId++;
@@ -2195,8 +2193,6 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
     }
 
     function purchase(uint256 _amount, uint256 _nftId, string _tokenURI) public payable {
-        uint256 price = tokenIdToPrice[_nftId];
-        require(price > 0, 'This token is not for sale');
         require(msg.value >= _amount, 'Value below price');
         
         address seller = ownerOf(_nftId);
@@ -2208,7 +2204,7 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
         emit purchase(
                     seller,
                     msg.sender, 
-                    amount,  //mint price 
+                    msg.value,
                     _nftId, 
                     _tokenURI
         );
