@@ -2149,6 +2149,19 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
     );
     event MintByAdmin ( address indexed _from, uint256 tokenId);
 
+
+    event Mint (address indexed _from, 
+                uint256 amount,
+                uint256 totalSupply
+    );
+
+    emit purchase(address indexed _from,
+                  address indexed _to, 
+                    amount,  //mint price 
+                    _nftId, 
+                    _tokenURI
+    );
+
     /**
     * Set platform fee
     */
@@ -2172,10 +2185,7 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
         );
     }
 
-    function transferToPlatform(uint256 _amount) private {
-        (bool success,) = this.call{value : _amount}("");
-        require(success, "Transfer failed.");
-    }
+    
 
     function mintByAdmin (string _tokenURI) public{
         _mint(msg.sender, nextTokenId);
@@ -2185,7 +2195,7 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
     }
 
     function purchase(uint256 _amount, uint256 _nftId, string _tokenURI) public payable {
-        uint256 price = tokenIdToPrice[_tokenId];
+        uint256 price = tokenIdToPrice[_nftId];
         require(price > 0, 'This token is not for sale');
         require(msg.value >= _amount, 'Value below price');
         
@@ -2194,24 +2204,25 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
 
         tokenURIMap[_nftId] = _tokenURI;
 
-        transferToBuyer(msg.value);
-        emit Mint(msg.sender, 
+        transferToSeller(seller, msg.value);
+        emit purchase(
+                    seller,
+                    msg.sender, 
                     amount,  //mint price 
-                    totalSupply()  //totalSupply
+                    _nftId, 
+                    _tokenURI
         );
     }
 
-    function transferToSeller(uint256 _amount) private {
-        (bool success,) = this.call{value : _amount}("");
-        require(success, "Transfer failed.");
-    }
-    
-    function transferToBuyer(uint256 _amount) private {
+    function transferToPlatform(uint256 _amount) private {
         (bool success,) = this.call{value : _amount}("");
         require(success, "Transfer failed.");
     }
 
-
+    function transferToSeller(address _seller, uint256 _amount) private {
+        (bool success,) = _seller.call{value : _amount}("");
+        require(success, "Transfer failed.");
+    }
 
      /**
      * Override tokenURI
@@ -2238,9 +2249,4 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
     (bool success,) = _address.call{value : _amount}("");
     require(success, "Transfer failed.");
     }
-    function transferToSeller(address _address, uint256 _amount) private {
-    (bool success,) = _address.call{value : _amount}("");
-    require(success, "Transfer failed.");
-    }
- 
 }
