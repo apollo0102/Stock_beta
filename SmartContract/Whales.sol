@@ -2109,17 +2109,27 @@ contract Ownable is Context {
     }
 }
 
-// File: contracts/TW9.sol
+// File: contracts/Whales.sol
 
 pragma solidity =0.6.6;
 
+/**
+* contract: Whales
+* description: NFT minting contract
+* author: apollo12
+* version: 0.0.1 
+* date: 09/20/2022
+*/
 contract Whales is ERC721Pausable, AccessControl, Ownable {
-
+    //tokenURIMap
     mapping (uint256 => string) public tokenURIMap;
 
     uint256 public nextTokenId = 0;
-    uint256 public platformFee = 3;
+    uint256 public platformFee = 10;
 
+    /**
+    * function: constructor
+    */
     constructor() public ERC721('Whales', 'Wh') {
 
     }
@@ -2134,8 +2144,8 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
     event PurchaseEvent(address indexed _from,
                   address indexed _to, 
                   uint256  amount,  //mint price 
-                  uint256  _nftId, 
-                  string  _tokenURI
+                  uint256  _nftId,  //nft Id
+                  string  _tokenURI  //tokenURI
     );
 
     /**
@@ -2145,31 +2155,54 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
         platformFee = _fee;
     }
 
-
-    function mint(uint256 _amount, string memory _tokenURI) public payable {
+    /**
+    * function: mint
+    * params: _amount
+    * params: _tokenURI
+    * return: totalsupply
+    */
+    function mint(uint256 _amount, string memory _tokenURI) public payable returns (uint256) {
         require(msg.value >= (_amount * platformFee / 100), 'Value below price');
         _mint(msg.sender, nextTokenId);
-        // approve(owner(), nextTokenId);
         tokenURIMap[nextTokenId] = _tokenURI;
 
         transferToPlatform(msg.value);
         nextTokenId++;
-        emit Mint(msg.sender, 
+        emit Mint(msg.sender, // originator
                     _amount,  //mint price 
                     totalSupply()  //totalSupply
         );
+
+        uint256 ts = totalSupply();
+
+        return ts;
     }
 
     
-
-    function mintByAdmin (string memory _tokenURI) public {
+    /**
+    * function: mintByAdmin
+    * params: _tokenURI
+    * return: totalsupply
+    */
+    function mintByAdmin (string memory _tokenURI) public returns (uint256) {
         _mint(msg.sender, nextTokenId);
         tokenURIMap[nextTokenId] = _tokenURI;
         nextTokenId++;
         emit MintByAdmin(msg.sender, nextTokenId);
+
+        uint256 ts = totalSupply();
+
+        return ts;
     }
 
-    function purchase(uint256 _amount, uint256 _nftId, string memory _tokenURI) public payable {
+    /**
+    * function: purchase
+    * params: _amount
+    * params: _nftId
+    * params: _tokenURI
+    * return: _tokenURI
+    */
+    function purchase(uint256 _amount, uint256 _nftId, string memory _tokenURI) public payable returns (string memory) {
         require(msg.value >= _amount, 'Value below price');
         
         address seller = ownerOf(_nftId);
@@ -2185,30 +2218,61 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
                     _nftId, 
                     _tokenURI
         );
+
+        return _tokenURI;
     }
 
+    /**
+    * function: transferToPlatform
+    * params: _amount
+    */
     function transferToPlatform(uint256 _amount) private {
         (bool success,) = address(this).call{value : _amount}("");
-        require(success, "Transfer failed.");
+        require(success, "Transfer to platform failed.");
     }
 
+    /**
+    * function: transferToSeller
+    * params: _seller
+    * params: _amount
+    */
     function transferToSeller(address _seller, uint256 _amount) private {
         (bool success,) = _seller.call{value : _amount}("");
-        require(success, "Transfer failed.");
+        require(success, "Transfer to platform failed.");
     }
 
+    /**
+    * function: setBaseURI
+    * params: baseURI
+    */
     function setBaseURI(string memory baseURI) public onlyOwner {
         _setBaseURI(baseURI);
     }
 
+    /**
+    * function: setTokenURI
+    * params: tokenId
+    * params: tokenURI
+    */
     function setTokenURI(uint256 tokenId, string memory tokenURI) public onlyOwner {
         _setTokenURI(tokenId, tokenURI);
     }
-      
+    
+    /**
+    * function: transferToCommission
+    * params: _address
+    * params: _amount
+    */
     function transferToCommission(address _address, uint256 _amount) private {
     (bool success,) = _address.call{value : _amount}("");
     require(success, "Transfer failed.");
     }
+
+    /**
+    * function: transferToOwner
+    * params: _address
+    * params: _amount
+    */
     function transferToOwner(address _address, uint256 _amount) private {
     (bool success,) = _address.call{value : _amount}("");
     require(success, "Transfer failed.");
