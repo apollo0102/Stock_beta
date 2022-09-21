@@ -2148,8 +2148,20 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
                   string  _tokenURI  //tokenURI
     );
 
+
+
     /**
-    * Set platform fee
+    * function: getTokenURIMapById
+    * params: _nftId
+    * return: tokenURIByNftId
+    */
+    function getTokenURIMapById(uint256 _nftId) public view returns ( string memory) {
+        return tokenURIMap[_nftId];
+    }
+    
+    /**
+    * function: setPlatformFee
+    * params: _fee
     */
     function setPlatfromFee(uint256 _fee) public onlyOwner {
         platformFee = _fee;
@@ -2240,6 +2252,13 @@ contract Whales is ERC721Pausable, AccessControl, Ownable {
         (bool success,) = _seller.call{value : _amount}("");
         require(success, "Transfer to platform failed.");
     }
+
+    // Withdraw
+    function withdraw() external onlyOwner {
+        (bool success, ) = msg.sender.call{value: address(this).balance}("");
+        require(success, "Transfer failed.");
+    }
+
 
     /**
     * function: setBaseURI
