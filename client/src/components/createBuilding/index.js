@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { InfoCircleOutlined,FileDoneOutlined,PlusOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined,FileDoneOutlined,PlusOutlined ,MinusCircleOutlined} from '@ant-design/icons';
 
 
 
 import { Button, message, Steps,Tabs, Form,
-  Input,  Col, Row,DatePicker,Tooltip, Select,Upload,Modal,Segmented} from 'antd';
+  Input,  Col, Row,DatePicker,Tooltip, Card,Select,Upload,Modal,Segmented,Space,Radio} from 'antd';
   const { Dragger } = Upload;
   const { TextArea } = Input;
   const { Option } = Select;
@@ -488,22 +488,520 @@ onClick={()=>{setSecondaryType(!secondaryType)}}
                                 }}
 
                               >
-                              {['Masonry','Metal','Reinforced Concrete','Steel','Wood Frame'].map((_,i)=><Option key={i}>{_}</Option>)}
+                              {['Dry','ESFR','Wet'].map((_,i)=><Option key={i}>{_}</Option>)}
                               </Select>
+                                </Form.Item>
+                              </div>
+                              <div className="column">
+                              <Form.Item  rules={[
+               {
+                 required: true,
+                 message: 'Please input land area!',
+               },
+             ]}  className="right-extra"  name="Land Area" label="Land Area">
+                             <Input  addonAfter={selectAfter} defaultValue="mysite" />
+                               </Form.Item>
                               </div>
 
                                 </div>
+                                <div className="columns margin-bottom-0 margin-top-0">
+                                <div className="column">
+                                <Form.Item  name="Parking" label="Parking">
+                              <Select
+
+                              dropdownRender={(menu) => (
+                              <>
+
+                              <Form.List style={{minWidth:'30vh',}} name="users">
+                              {(fields, { add, remove }) => (
+                              <>
+
+                              <CustomMenu fields={fields} add={add} remove={remove}
+                              />
+
+                              <Form.Item className="extra-marginBottom-0" style={{padding:'1em',marginBottom:'0 !important'}}>
+
+<span style={{display:'flex',flexDirection:'row',alignItems: 'center',minWidth:'7em',marginRight:'1em'}}>
+<label style={{marginRight:'0.5em'}}>Ratio:</label>
+                        <Input placeholder="0.00"/>
+            </span>
+
+                              <Button style={{marginRight:'1em',backgroundColor:'#131111'}} type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                              Add Parking Type
+                              </Button>
+                              <Button  type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                            Done
+                              </Button>
+                              </Form.Item>
+
+                              </>
+                              )}
+                              </Form.List>
+
+                              </>
+                              )}
+                              style={{
+                              width: '100%',
+                              }}
+
+                              >
+                              {['Dry','ESFR','Wet'].map((_,i)=><Option key={i}>{_}</Option>)}
+                              </Select>
+                              </Form.Item>
+                              </div>
+                                </div>
+                                <div className="columns margin-bottom-0 margin-top-0">
+                                <div className="column">
+                                <Form.Item
+                 className="right-extra"  name="Zoning" label="Zoning">
+                               <Input  />
+                                 </Form.Item>
+                              </div>
+                              <div className="column">
+                              <Form.Item
+           className="right-extra"  name="ZoningDescription" label="Zoning Descripttion">
+             <TextArea
+               showCount
+               maxLength={150}
+               style={{
+                 height: 120,
+                 minHeight:120
+               }}
+               childrenStyle={{
+                   minHeight:120
+               }}
+               placeholder="provide a zoning description"
+             />
+                               </Form.Item>
+                            </div>
+                                </div>
+                                <div className="columns margin-bottom-0 margin-top-0">
+                                <div className="column">
+                                <Form.Item   label="Slab to Slab Height">
+                                <span className="right-extra" style={{display: 'flex', flexDirection: 'row'}} >
+                                <Input suffix="FT" placeholder="0" />
+
+                                 <Input />
+                                 </span>
+                                  </Form.Item>
+                                </div>
+
+                                <div className="column">
+                                <Form.Item className="right-extra"  label="Core Factor">
+                                  <span className="right-extra" style={{display: 'flex', flexDirection: 'row'}} >
+                                <Input suffix="FT" placeholder="0" />
+
+                                 <Input suffix="FT" placeholder="0"  />
+                                 </span>
+                                  </Form.Item>
+                                </div>
+
+                                                                <div className="column">
+                                                                <Form.Item className="right-extra"  label="Column Width x Depth">
+                                                                  <span className="right-extra" style={{display: 'flex', flexDirection: 'row'}} >
+                                                                <Input suffix="%" placeholder="0" />
+
+
+                                                                 </span>
+                                                                  </Form.Item>
+                                                                </div>
+                                </div>
+                                <div className="columns margin-bottom-0 margin-top-0">
+                                <div className="column">
+                                <Form.Item  name="APN" label="APN">
+                              <Select
+
+                              dropdownRender={(menu) => (
+                              <>
+
+                              <Form.List style={{minWidth:'30vh',}} name="apns">
+                              {(fields, { add, remove }) => (
+                              <>
+
+                              <CustomMenu2 fields={fields} add={add} remove={remove}
+                              />
+
+                              <Form.Item className="extra-marginBottom-0" style={{padding:'1em',marginBottom:'0 !important'}}>
+
+                              <Button style={{marginRight:'1em',backgroundColor:'#131111'}} type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                              Add APN
+                              </Button>
+                              <Button  type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                            Done
+                              </Button>
+                              </Form.Item>
+
+                              </>
+                              )}
+                              </Form.List>
+
+                              </>
+                              )}
+                              style={{
+                              width: '100%',
+                              }}
+
+                              >
+                              {['Dry','ESFR','Wet'].map((_,i)=><Option key={i}>{_}</Option>)}
+                              </Select>
+                              </Form.Item>
+                              </div>
+                              <div className="column">
+                               <Form.Item className="right-extra" name="features" label="Features">
+                               <Select
+                                 mode="multiple"
+                                 allowClear
+                                 style={{
+                                   width: '100%',
+                                 }}
+                                 open={marketAs}
+                                 onClick={(e) =>{ if('ant-select-item-option-content' !==e.target.className){ setMarketAs(!marketAs);}console.log(e.target.className)}}
+                                 placeholder="Please select"
+
+                                 showArrow={true}
+                                 defaultValue={[]}
+                               >
+                               {['24 Hour Access','Atrium','Banking','Bus Line','Conferencing Facity','Convenience Store','Firness Center','Foods Servuce','Metro/Subway','Property Manager on Site','Restaurant','Security System','Food Service','Wi-Fi','Accent Lighting','Air Conditioning','Automatic Blinds','Balcony','Basement','Bycle Sorage','Bio-Tech/Lab Space','Car charging Station','Yard','Warefront','Storage Space','Skyway','Skylights','Sky Terrace','Signage','Shower Facilities','Secure Storage','Roof Terrace','Reception','Reecessed Lighting','Raised Floor','Pond','Plus 15','Plug & Play','Perimeter Trunking','PATH','Partitioned Offices','Outdoor Seating','Open-Plan','Natural Light','Monument Signagee','Kitchen','High Ceilings','Hardwood Floors','Golf Course','Fully Carpeted','Food Court','Fireplace','Fire Pits','Fanced Lot','Energy Performance Rating - E','Energy Performance Rating - D','Energy Performance Rating - C','Energy Performance Rating - B','Energy Performance Rating - A','Dry Cleaner','Drop Ceiling','Direct Elevator Exposure','Demised WV facilities','DDA Compliant','Day Care','Courtyard','Controlled Access','Concierge','Commuter Rail','Common Parts WC Facilities','Central Heating'].map((_,i)=><Option key={i}>{_}</Option>)}
+                               </Select>
+                                </Form.Item>
+                            </div>
+                                </div>
                 </>
+                case "Secure Information":
+                    return <>
+                    <Radio.Group onChange={onChangeProperty} value={valueProperty}>
+                    <div className="columns " style={{marginBottom:'1em'}}>
+                        <div className="column">
+
+
+
+
+                        <Card
+   title="Public"
+   extra={ <Radio value={1}></Radio>}
+   style={valueProperty==1?{
+     width: '100%',
+     borderColor:'#8758ff'}
+   :{width:'100%'}}
+ >
+   <p>Choosing ‘Public’ gives all Users access to the information entered within the Secure Information section for this listing and does not generate Secure Leads.</p>
+ </Card>
+                      </div>
+                      <div className="column">
+
+
+
+
+                      <Card
+ title="Registration"
+ extra={ <Radio value={2}></Radio>}
+ style={valueProperty==2?{
+   width: '100%',
+   borderColor:'#8758ff'}
+ :{width:'100%'}}
+>
+ <p>Users must register their contact information . User contact information will be shared as a lead.</p>
+</Card>
+                    </div>
+
+
+
+                          </div>
+                          <div className="columns margin-bottom-0">
+                    <div className="column">
+
+
+
+
+                    <Card
+title="Confidentiality Agreement"
+extra={ <Radio value={3}></Radio>}
+style={valueProperty==3?{
+ width: '100%',
+ borderColor:'#8758ff'}
+:{width:'100%'}}
+>
+<p>Users must also sign the CoStar standard electronic confidentiality agreement.</p>
+</Card>
+                  </div>
+                  <div className="column">
+
+
+
+                  <Card
+title="    Approval Required"
+extra={ <Radio value={4}></Radio>}
+style={valueProperty==4?{
+width: '100%',
+borderColor:'#8758ff'}
+:{width:'100%'}}
+>
+<p>Listing contacts must approve each confidentiality agreement.</p>
+</Card>
+                </div>
+
+
+                      </div>
+
+                      </Radio.Group>
+
+                    </>
+                    case "Highlights":
+                        return <>
+
+                      <Form.List style={{minWidth:'30vh',}} name="highlights">
+
+                      {(fields, { add, remove }) => (
+                      <>
+
+                      <CustomMenu3 fields={fields} add={add} remove={remove}
+                      />
+
+                      <Form.Item className="extra-marginBottom-0" style={{paddingTop:'1em',marginBottom:'0 !important'}}>
+
+                      <Button style={{marginRight:'1em',backgroundColor:'#131111'}} type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                      Add Highlight
+                      </Button>
+                      <Button  type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    Done
+                      </Button>
+                      </Form.Item>
+
+                      </>
+                      )}
+                      </Form.List>
+
+                      <Form.Item style={{marginTop:'1em'}} className="right-extra"  label="Insert an alternative address for the property that will display in the search results and listing profile.">
+
+                      <Input   placeholder="Address.." />
+
+
+                        </Form.Item>
+
+                                              <Form.List style={{minWidth:'30vh',}} name="Links">
+
+                                              {(fields, { add, remove }) => (
+                                              <>
+
+                                              <div className="columns margin-bottom-0 ">
+                                              <div className="column">
+                                              Links
+                                              </div>
+                                              <div className="column">
+                                              Description
+                                              </div>
+                                              </div>
+                                              <CustomMenu4 fields={fields} add={add} remove={remove}
+                                              />
+
+                                              <Form.Item className="extra-marginBottom-0" style={{paddingTop:'1em',marginBottom:'0 !important'}}>
+
+                                              <Button style={{marginRight:'1em',backgroundColor:'#131111'}} type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                              Add Links
+                                              </Button>
+                                              <Button  type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                            Done
+                                              </Button>
+                                              </Form.Item>
+
+                                              </>
+                                              )}
+                                              </Form.List>
+                        </>
   default:
     return <></>;
 }
    }
+   const [valueProperty, setValueProperty] = useState(1);
+
+ const onChangeProperty = (e) => {
+   console.log('radio checked', e.target.value);
+   setValueProperty(e.target.value);
+ };
+
+   const CustomMenu = ({fields,add,remove})=>{
+     let count = 0;
+     useEffect(()=>{
+       if(!count){
+       add();
+       count = count+1;
+     }
+
+     },[])
+     return(
+       <>
+       <div style={{maxHeight:'10em',overflow:'auto'}}>
+       {fields.map(({ key, name, ...restField }) => (
+<div style={{display: 'flex', marginLeft:'1em',marginRight:'1em'}}>
+<div className={key ==0?"columns margin-bottom-0 " :"columns margin-bottom-0 margin-top-0"}>
+<div className="column">
+           <Form.Item
+             {...restField}
+      rules={[
+{
+required: true,
+message: 'Please select parking type!',
+},
+]} className="extra-l" style={{justifyContent: 'flex-start'}} name={`TypeP{key}`} label="Parking Type" >
+             <Select
+
+               style={{
+                 width: '100%',
+               }}
+
+             >
+             {['Covered','Covered Tandem','Reserved','Surface'].map((_,i)=><Option key={i}>{_}</Option>)}
+             </Select>
+           </Form.Item>
+</div>
+<div className="column">
+           <Form.Item
+             {...restField}
+             name={[name, 'last']}
+             rules={[
+               {
+                 required: true,
+                 message: 'Missing spaces',
+               },
+             ]}
+name={`Spaces{key}`} label="Spaces"
+           >
+             <Input  />
+           </Form.Item>
+           </div>
+           <div className="column">
+           <Form.Item
+             {...restField}
+             name={[name, 'last']}
+             rules={[
+               {
+                 required: true,
+                 message: 'Missing spaces',
+               },
+             ]}
+name={`Monthly{key}`} label="Monthly Cost"
+           >
+             <Input prefix='$' placeholder="0.00"/>
+           </Form.Item>
+           </div>
+           </div>
+           <span style={{display: 'flex',alignItems: 'center',justifyContent: 'center',marginLeft:'2em',marginBottom:'1em'}}>
+           <MinusCircleOutlined onClick={() => remove(name)} />
+           </span>
+         </div>
+       ))}
+       </div>
+</>
+       )
+   }
+
+   const CustomMenu2 = ({fields,add,remove})=>{
+     let count = 0;
+     useEffect(()=>{
+       if(!count){
+       add();
+       count = count+1;
+     }
+
+     },[])
+     return(
+       <>
+       <div style={{maxHeight:'10em',overflow:'auto',display:'flex',flexDirection:'column',width: '100%'}}>
+       {fields.map(({ key, name, ...restField }) => (
+<div style={{display: 'flex', marginLeft:'1em',marginRight:'1em'}}>
+<div style={{width: '100%'}} className={key ==0?"columns margin-bottom-0 " :"columns margin-bottom-0 margin-top-0"}>
+<div className="column">
+<Form.Item style={{width:'100%'}}>
+             <Input  />
+</Form.Item>
+           </div>
+           </div>
+           <span style={{display: 'flex',alignItems: 'center',justifyContent: 'center',marginLeft:'2em',marginBottom:'0em'}}>
+           <MinusCircleOutlined onClick={() => remove(name)} />
+           </span>
+         </div>
+       ))}
+       </div>
+</>
+       )
+   }
+   const CustomMenu3 = ({fields,add,remove})=>{
+     let count = 0;
+     useEffect(()=>{
+       if(!count){
+       add();
+       count = count+1;
+     }
+
+     },[])
+     return(
+       <>
+<span style={{marginBottom:'1em'}}>Describe the most appealing features of the property.</span>
+       <div style={{maxHeight:'12em',marginTop:'1em',overflow:'auto',display:'flex',flexDirection:'column',width: '100%'}}>
+
+       {fields.map(({ key, name, ...restField }) => (
+<div style={{display: 'flex',}}>
+
+<div style={{width: '100%'}} className={key ==0?"columns margin-bottom-0 " :"columns margin-bottom-0 margin-top-0"}>
+<div className="column">
+<Form.Item style={{width:'100%'}}>
+             <Input  />
+</Form.Item>
+           </div>
+           </div>
+           <span style={{display: 'flex',alignItems: 'center',justifyContent: 'center',marginLeft:'2em',marginBottom:'2em'}}>
+           <MinusCircleOutlined onClick={() => remove(name)} />
+           </span>
+         </div>
+       ))}
+       </div>
+</>
+       )
+   }
+   const CustomMenu4 = ({fields,add,remove})=>{
+     let count = 0;
+     useEffect(()=>{
+       if(!count){
+       add();
+       count = count+1;
+     }
+
+     },[])
+     return(
+       <>
+
+       <div style={{maxHeight:'12em',marginTop:'1em',overflow:'auto',display:'flex',flexDirection:'column',width: '100%'}}>
+
+       {fields.map(({ key, name, ...restField }) => (
+<div style={{display: 'flex', }}>
+
+<div style={{width: '100%'}} className={key ==0?"columns margin-bottom-0 " :"columns margin-bottom-0 margin-top-0"}>
+<div className="column">
+<Form.Item style={{width:'100%'}}>
+
+             <Input  />
+</Form.Item>
+           </div>
+           <div className="column">
+           <Form.Item style={{width:'100%'}} >
+
+                        <Input  />
+           </Form.Item>
+                      </div>
+           </div>
+           <span style={{display: 'flex',alignItems: 'center',justifyContent: 'center',marginLeft:'2em',marginBottom:'2em'}}>
+           <MinusCircleOutlined onClick={() => remove(name)} />
+           </span>
+         </div>
+       ))}
+       </div>
+</>
+       )
+   }
    const selectAfter = (
-     <Select defaultValue=".com" className="select-after">
-       <Option value=".com">.com</Option>
-       <Option value=".jp">.jp</Option>
-       <Option value=".cn">.cn</Option>
-       <Option value=".org">.org</Option>
+     <Select defaultValue="ac" className="select-after">
+       <Option value="ac">AC</Option>
+       <Option value="sf">SF</Option>
      </Select>
    );
   return (
