@@ -1,1 +1,1 @@
-This is nft minting contract
+Stock NFT marketplace project!
