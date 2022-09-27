@@ -6,11 +6,19 @@ import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 import CreateBuilding from "./components/createBuilding";
 import './App.css';
+// Import css files
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Details from "./components/details";
 import { Button, message, Steps,Tabs, Form,
   Input,  Col, Row,DatePicker,Tooltip, Card,Select,Upload,Modal,Segmented,Space,Radio} from 'antd';
 
 function App() {
   const [building, setBuilding] = useState(false);
+  const [details, setDetails] = useState(false);
+  const closeDetails = () =>{
+    setDetails(false)
+  }
   const closeBuilding = () => {
     setBuilding(false)
   }
@@ -155,7 +163,9 @@ function App() {
 
     </Form.Item>
     <span style={{display:'flex',flexDirection:'row',alignItems: 'center',minWidth:'100%',marginRight:'1em'}}>
-    <Button style={{marginRight:'1em',backgroundColor:'#131111'}} type="dashed" onClick={() => {}} block icon={<>< />}>
+    <Button style={{marginRight:'1em',backgroundColor:'#131111'}} type="dashed" onClick={() => {
+      setDetails(true)
+    }} block icon={<>< />}>
     Details
     </Button>
     <Button style={{marginRight:'1em',backgroundColor:'#131111'}} type="dashed" onClick={() => {}} block icon={<>< />}>
@@ -382,6 +392,19 @@ function App() {
              <div className="modal-header">Create Building NFT listing</div>
              <div className="modal-body">
              <CreateBuilding/>
+             </div>
+             </Rodal>
+             <Rodal
+             className="custom-modal"
+             visible={details}
+             animation="flip"
+             closeOnEsc={true}
+             closeMaskOnClick={true}
+             onClose={closeDetails}
+             >
+             <div className="modal-header">Ten Museum Park Commercial - FOR SALE1040 Biscayne Blvd</div>
+             <div className="modal-body">
+             <Details/>
              </div>
              </Rodal>
                 <label class="label">Type:</label>

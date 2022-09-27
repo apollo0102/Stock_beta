@@ -1,5 +1,6 @@
 {
   "name": "whales-nft",
+"homepage":".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,10 +11,16 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^4.23.2",
     "craco-less": "^2.0.0",
+    "dom-css": "^2.1.0",
+    "keen-slider": "^6.8.2",
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "react-slick": "^0.29.0",
     "rodal": "^2.0.0",
+    "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
